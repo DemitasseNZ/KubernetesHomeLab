@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 swapoff -a
+cat /vagrant/hosts | tee -a /etc/hosts
 
 dnf -y install dnf-plugins-core
 dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
@@ -10,8 +11,6 @@ systemctl daemon-reload
 systemctl enable docker.service
 systemctl start docker
 
-cat /vagrant/hosts | tee -a /etc/hosts
-setenforce 0
 cp /vagrant/kubernetes.repo /etc/yum.repos.d/
 yum install -y kubelet kubeadm kubectl
 sed -i 's/driver=systemd/driver=cgroupfs/g' /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
